@@ -44,7 +44,7 @@ func main() {
 		*mntpoint = *mntpoint + "/"
 	}
 
-	if (len(*ldapHostname) == 0 || len(*ldapIP) == 0) || len(*domain) == 0 || len(*user) == 0 || len(*pass) == 0 {
+	if (len(*ldapHostname) == 0 && len(*ldapIP) == 0) || len(*domain) == 0 || len(*user) == 0 || len(*pass) == 0 {
 		flag.PrintDefaults()
 		log.Fatal("[ERROR] Provide username, password, DC, and domain!\n")
 	}
