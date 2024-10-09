@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-	ldapHostname := flag.String("dc", "", "Hostname of DC to connect to. ex. -dc=\"dc.test.local\"")
+	ldapServer := flag.String("dc", "", "Hostname of DC to connect to. ex. -dc=\"dc.test.local\"")
 	ldapIP := flag.String("dc-ip", "", "Optional: IP address of DC to connect to (useful if proxyfying without DNS magic)")
 	domain := flag.String("domain", "", "domain ex. -domain=\"test.local\"")
 	user := flag.String("username", "", "username to connect with ex. -username=\"testuser\"")
@@ -44,21 +44,21 @@ func main() {
 		*mntpoint = *mntpoint + "/"
 	}
 
-	if (len(*ldapHostname) == 0 && len(*ldapIP) == 0) || len(*domain) == 0 || len(*user) == 0 || len(*pass) == 0 {
+	if (len(*ldapServer) == 0 && len(*ldapIP) == 0) || len(*domain) == 0 || len(*user) == 0 || len(*pass) == 0 {
 		flag.PrintDefaults()
 		log.Fatal("[ERROR] Provide username, password, DC, and domain!\n")
 	}
 	if *ldapIP == "" {
-		*ldapHostname, *ldapIP = goddi.ValidateIPHostname(*ldapHostname, *domain)
+		*ldapServer, *ldapIP = goddi.ValidateIPHostname(*ldapServer, *domain)
 	} else {
-		ldapHostname = ldapIP
+		ldapServer = ldapIP
 	}
 
 	baseDN := "dc=" + strings.Replace(*domain, ".", ",dc=", -1)
 	username := *user + "@" + *domain
 
 	li := &goddi.LdapInfo{
-		LdapServer:       *ldapHostname,
+		LdapServer:       *ldapServer,
 		LdapIP:           *ldapIP,
 		LdapPort:         uint16(389),
 		LdapTLSPort:      uint16(636),
